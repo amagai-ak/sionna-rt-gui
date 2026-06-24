@@ -107,3 +107,14 @@ License
 -------
 
 Copyright (c) 2025-2026 NVIDIA Corporation. Licensed under the Apache License 2.0. See [LICENSE](LICENSE) for details.
+
+
+## Modifications (by amagai)
+
+### Additional options
+
+Even if a GPU is present, force the CPU to be used.
+
+```bash
+python ./scripts/run.py --cpu
+```

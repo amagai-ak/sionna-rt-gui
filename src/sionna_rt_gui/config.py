@@ -45,6 +45,7 @@ class AntennaArrayConfig:
     horizontal_spacing: float = 0.5
     pattern_i: int = antenna_pattern_registry.list().index("iso")
     polarization_i: int = polarization_registry.list().index("V")
+    txpower_dbm: float = 23.0
 
     @property
     def pattern(self) -> str:
@@ -248,6 +249,9 @@ class GuiConfig:
     radio_material_thickness: float | None = None
     # If set, override the radio materials' scattering coefficient property
     radio_material_scattering_coefficient: float | None = None
+
+    # Carrier frequency used for scene simulation (Hz)
+    scene_frequency_hz: float = 6.0e9
 
     # Antenna arrays
     tx_array: AntennaArrayConfig = field(default_factory=AntennaArrayConfig)

@@ -356,6 +356,10 @@ class SionnaRtGui:
                 (0, 0, self.scene.mi_scene.bbox().center().z),
                 self.cfg.rendering.slice_plane_normal,
             )
+        
+        # Set the scene frequency in the Sionna scene to the value from the configuration
+        self.scene.frequency = self.cfg.scene_frequency_hz
+        print(f"[*] Scene frequency set to: {self.scene.frequency / 1e9} GHz")
 
     def on_files_dropped(self, files: list[str]):
         for file in files:
@@ -744,6 +748,8 @@ class SionnaRtGui:
             position=position,
             orientation=[0, 0, 0],
         )
+        if is_transmitter:
+            new_rd.power_dbm = self.cfg.tx_array.txpower_dbm
         self.scene.add(new_rd)
 
         set_or_update_radio_devices_polyscope(
