@@ -108,6 +108,7 @@ License
 
 Copyright (c) 2025-2026 NVIDIA Corporation. Licensed under the Apache License 2.0. See [LICENSE](LICENSE) for details.
 
+---
 
 ## Modifications (by amagai)
 
@@ -119,7 +120,10 @@ Even if a GPU is present, force the CPU to be used.
 python ./scripts/run.py --cpu
 ```
 
-### Configuration file
+
+### Configuration file (YAML)
+
+Several parameters have been added.
 
 ```text
 
@@ -135,6 +139,6 @@ tx_array:
   txpower_dbm: 23.0
 ```
 
-display_radius_min in raio_map means minimum radius of Tx/Tx sphere.
+display_radius_min in raio_map means minimum radius of Tx/Rx sphere.
 Default value is 1.0 but its too large for indoor simulation.
 
