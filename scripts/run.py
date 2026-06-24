@@ -7,19 +7,17 @@ import argparse
 import logging
 import os
 import sys
+import mitsuba as mi
 
 
 def add_project_root_to_path():
     lib_path = os.path.join(os.path.dirname(__file__), "..", "src")
     if lib_path not in sys.path:
-        sys.path.append(lib_path)
+        sys.path.insert(0, lib_path)
 
 
 if __name__ == "__main__":
     add_project_root_to_path()
-
-from sionna_rt_gui import AppHolder, DEFAULT_CONFIG_PATH
-from sionna_rt_gui.config import load_config
 
 
 def main():
@@ -30,8 +28,14 @@ def main():
         "--config",
         "-c",
         type=str,
-        default=DEFAULT_CONFIG_PATH,
+        default=None,
         help="Path to the GUI configuration file to use.",
+    )
+    parser.add_argument(
+        "--cpu",
+        action="store_true",
+        help="Force to run on CPU even if a GPU is available. LLVM will be used.",
+        default=False,
     )
     parser.add_argument(
         "scene",
@@ -46,6 +50,15 @@ def main():
     )
     watch_group.add_argument("--no-watch", action="store_false", dest="watch")
     args = parser.parse_args()
+
+    if args.cpu:
+        print("Running on CPU (LLVM) mode.")
+        mi.set_variant("llvm_ad_mono_polarized")
+
+    from sionna_rt_gui.config import load_config
+    from sionna_rt_gui import AppHolder, DEFAULT_CONFIG_PATH
+    if args.config is None:
+        args.config = DEFAULT_CONFIG_PATH
 
     cfg_overrides = {
         "use_live_reload": args.watch,
