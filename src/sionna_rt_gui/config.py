@@ -98,6 +98,8 @@ class RadioMapConfig:
     # -- Display
     color_map: str = "viridis"
     use_alpha: bool = True
+    # Minimum display radius for transmitter/receiver point clouds in Polyscope.
+    display_radius_min: float = 1.0
     vmin: float = -150
     vmax: float = -50
     show_colorbar: bool = True
@@ -116,6 +118,9 @@ class RadioMapConfig:
 @dataclass(kw_only=True)
 class PathsConfig:
     auto_update: bool = True
+
+    # Minimum display radius for path curve networks in Polyscope.
+    display_radius_min: float = 0.3
 
     # Minimum delay between path computations, which involves ray tracing.
     # Set this higher (e.g., 0.1-1.0) to reduce GPU load when animations are playing.

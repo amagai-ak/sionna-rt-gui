@@ -118,3 +118,23 @@ Even if a GPU is present, force the CPU to be used.
 ```bash
 python ./scripts/run.py --cpu
 ```
+
+### Configuration file
+
+```text
+
+scene_frequency_hz: 1.0e9
+
+radio_map:
+  display_radius_min: 0.3
+
+paths:
+  display_radius_min: 0.01
+
+tx_array:
+  txpower_dbm: 23.0
+```
+
+display_radius_min in raio_map means minimum radius of Tx/Tx sphere.
+Default value is 1.0 but its too large for indoor simulation.
+

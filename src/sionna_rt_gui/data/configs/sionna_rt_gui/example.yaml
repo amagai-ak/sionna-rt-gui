@@ -10,3 +10,7 @@ rendering:
 radio_map:
   cell_size: [0.5, 0.5]
   color_map: "plasma"
+  display_radius_min: 1.0
+
+paths:
+  display_radius_min: 0.3

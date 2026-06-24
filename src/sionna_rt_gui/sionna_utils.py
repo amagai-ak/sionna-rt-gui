@@ -100,7 +100,10 @@ def set_or_update_radio_devices_polyscope(
             struct = candidate
 
     if struct is None:
-        display_radius = max(0.001 * scene_scale(gui.scene), 1)
+        display_radius = max(
+            0.001 * scene_scale(gui.scene),
+            gui.cfg.radio_map.display_radius_min,
+        )
         struct = ps.register_point_cloud(
             name,
             position_np,
@@ -351,7 +354,10 @@ def add_paths_to_polyscope(
         edges="segments",
         enabled=True,
     )
-    display_radius = max(0.0001 * scene_scale(gui.scene), 0.3)
+    display_radius = max(
+        0.0001 * scene_scale(gui.scene),
+        gui.cfg.paths.display_radius_min,
+    )
     struct.set_radius(display_radius, relative=False)
 
     struct.add_color_quantity(
