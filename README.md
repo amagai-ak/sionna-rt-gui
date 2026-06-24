@@ -139,6 +139,4 @@ tx_array:
   txpower_dbm: 23.0
 ```
 
-display_radius_min in raio_map means minimum radius of Tx/Rx sphere.
-Default value is 1.0 but its too large for indoor simulation.
-
+The `display_radius_min` property of `raio_map` represents the minimum radius of the sphere (marker) that indicates the Tx/Rx position.
