@@ -31,6 +31,49 @@ DEFAULT_SLICE_PLANE_NAME = "Scene Slice Plane 0"
 # ------------------------
 
 
+# ------------------------
+# Add my antenna pattern and polarization to the registries.
+import drjit as dr
+import mitsuba as mi
+from sionna.rt import PolarizedAntennaPattern, register_antenna_pattern
+
+def gaussian_pattern_factory(*, polarization, polarization_model="tr38901_2"):
+
+    bw_deg = 45.0  # 3 dB beamwidth in degrees
+    bw_theta = bw_deg * dr.pi/180.0
+    bw_phi = bw_deg * dr.pi/180.0
+
+    # Convert 3 dB beamwidth to Gaussian standard deviation
+    sigma_theta = bw_theta / dr.sqrt(8*dr.log(2))
+    sigma_phi = bw_phi / dr.sqrt(8*dr.log(2))
+    
+    # Calculate the gain at boresight (theta=pi/2, phi=0) to ensure the pattern is normalized
+    gain_0 = 4.0 * dr.pi / (bw_theta * bw_phi)
+    gain_0_dbi = 10.0 * dr.log(gain_0) / dr.log(10.0)
+    print(f"Gaussian antenna pattern: bw={bw_deg:.2f}, gain={gain_0:.2f} ({gain_0_dbi:.2f} dBi)")
+
+    def v_gaussian_pattern(theta, phi):
+        # Wrap phi to [-pi, pi]
+        phi = phi + dr.pi
+        phi -= dr.floor(phi / (2.0*dr.pi)) * 2.0*dr.pi
+        phi -= dr.pi
+
+        gain = gain_0 * dr.exp(-0.5 * (((theta - dr.pi/2.0) / sigma_theta)**2 + (phi / sigma_phi)**2))
+        return mi.Complex2f(gain, 0)
+
+    return PolarizedAntennaPattern(
+        v_pattern=v_gaussian_pattern,
+        polarization=polarization,
+        polarization_model=polarization_model,
+    )
+
+
+def register_my_antenna_pattern():
+    # Register the custom Gaussian antenna pattern
+    register_antenna_pattern("gaussian45", gaussian_pattern_factory)
+
+# ------------------------
+
 @dataclass(kw_only=True)
 class AntennaArrayConfig:
     """
@@ -39,6 +82,7 @@ class AntennaArrayConfig:
     expose those fields.
     """
 
+    register_my_antenna_pattern()
     num_rows: int = 1
     num_cols: int = 1
     vertical_spacing: float = 0.5

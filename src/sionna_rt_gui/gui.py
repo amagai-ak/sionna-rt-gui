@@ -359,7 +359,7 @@ class SionnaRtGui:
         
         # Set the scene frequency in the Sionna scene to the value from the configuration
         self.scene.frequency = self.cfg.scene_frequency_hz
-        print(f"[*] Scene frequency set to: {self.scene.frequency / 1e9} GHz")
+        print(f"Scene frequency set to: {self.scene.frequency / 1e9} GHz")
 
     def on_files_dropped(self, files: list[str]):
         for file in files:
