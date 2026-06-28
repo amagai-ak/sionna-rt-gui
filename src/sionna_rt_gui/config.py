@@ -112,6 +112,11 @@ class AntennaArrayConfig:
 
 # ------------------------
 
+class RadiomapMetric(Enum):
+    PATH_GAIN = 0
+    RSS = 1
+    SINR = 2
+
 
 @dataclass(kw_only=True)
 class RadioMapConfig:
@@ -150,6 +155,7 @@ class RadioMapConfig:
     # When updating the radio map, upload new values directly from the device.
     # This is only supported when using a CUDA variant.
     use_direct_update_from_device: bool = True
+    metric: RadiomapMetric = RadiomapMetric.PATH_GAIN
 
     @property
     def samples_per_it(self) -> int:

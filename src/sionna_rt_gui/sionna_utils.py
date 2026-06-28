@@ -179,8 +179,17 @@ def add_radio_map_to_polyscope(
             has_buffer = False
 
         # Prepare color-mapped radio map (directly on device)
-        dr.eval(radio_map.path_gain)  # Note: important to avoid kernel misses.
-        rm_values = dr.max(radio_map.path_gain, axis=0)
+        if cfg.metric == RadioMapConfig.metric.PATH_GAIN:
+            dr.eval(radio_map.path_gain)  # Note: important to avoid kernel misses.
+            rm_values = dr.max(radio_map.path_gain, axis=0)
+        elif cfg.metric == RadioMapConfig.metric.RSS:
+            dr.eval(radio_map.rss)  # Note: important to avoid kernel misses.
+            rm_values = dr.max(radio_map.rss, axis=0)
+        elif cfg.metric == RadioMapConfig.metric.SINR:
+            dr.eval(radio_map.sinr)  # Note: important to avoid kernel misses.
+            rm_values = dr.max(radio_map.sinr, axis=0)
+        else:
+            raise ValueError(f"Unsupported radio map metric: {cfg.metric}")
         texture, alpha = radio_map_texture(
             rm_values,
             db_scale=True,

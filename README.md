@@ -131,6 +131,7 @@ scene_frequency_hz: 1.0e9
 
 radio_map:
   display_radius_min: 0.3
+  metric: RSS
 
 paths:
   display_radius_min: 0.01
@@ -139,4 +140,14 @@ tx_array:
   txpower_dbm: 23.0
 ```
 
+|parameter|desc.|example|
+|---|---|---|
+|scene_frequency_hz|Frequency(Hz)|2.4e9|
+|metric|Metric to show. PATH_GAIN/RSS/SINR|RSS|
+|txpower_dbm|Tx power in dBm|23.0|
+|display_radius_min|minimum radius of the sphere/path in m|0.1|
+
+
 The `display_radius_min` property of `raio_map` represents the minimum radius of the sphere (marker) that indicates the Tx/Rx position.
+
+Default metric is PATH_GAIN.
