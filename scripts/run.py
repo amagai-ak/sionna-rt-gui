@@ -38,6 +38,13 @@ def main():
         default=False,
     )
     parser.add_argument(
+        "--write-config",
+        "-w",
+        type=str,
+        default=None,
+        help="Write the resolved GUI configuration to the given YAML file.",
+    )
+    parser.add_argument(
         "scene",
         type=str,
         nargs="?",
@@ -55,7 +62,7 @@ def main():
         print("Running on CPU (LLVM) mode.")
         mi.set_variant("llvm_ad_mono_polarized")
 
-    from sionna_rt_gui.config import load_config
+    from sionna_rt_gui.config import load_config, save_config
     from sionna_rt_gui import AppHolder, DEFAULT_CONFIG_PATH
     if args.config is None:
         args.config = DEFAULT_CONFIG_PATH
@@ -64,6 +71,8 @@ def main():
         "use_live_reload": args.watch,
     }
     cfg = load_config(args.config, scene_filename=args.scene)
+    if args.write_config is not None:
+        save_config(cfg, args.write_config)
 
     # Configure logging
     logging.basicConfig(

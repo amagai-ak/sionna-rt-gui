@@ -4,7 +4,7 @@
 #
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields, is_dataclass
 from enum import Enum
 import logging
 import os
@@ -363,3 +363,33 @@ def load_config(config_path: str, scene_filename: str | None = None) -> GuiConfi
         loaded["scene_filename"] = scene_filename
     merged = OmegaConf.merge(OmegaConf.structured(GuiConfig), loaded)
     return OmegaConf.to_object(merged)
+
+
+def _to_yaml_compatible(value):
+    if is_dataclass(value):
+        serialized = {}
+        for field_info in fields(value):
+            if field_info.name == "config_path":
+                continue
+            serialized[field_info.name] = _to_yaml_compatible(
+                getattr(value, field_info.name)
+            )
+        return serialized
+    if isinstance(value, Enum):
+        return value.name
+    if isinstance(value, tuple):
+        return [_to_yaml_compatible(item) for item in value]
+    if isinstance(value, list):
+        return [_to_yaml_compatible(item) for item in value]
+    if isinstance(value, dict):
+        return {key: _to_yaml_compatible(item) for key, item in value.items()}
+    return value
+
+
+def save_config(config: GuiConfig, output_path: str) -> None:
+    with open(output_path, "w", encoding="utf-8") as file_obj:
+        yaml.safe_dump(
+            _to_yaml_compatible(config),
+            file_obj,
+            sort_keys=False,
+        )
