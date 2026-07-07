@@ -59,7 +59,8 @@ def gaussian_pattern_factory(*, polarization, polarization_model="tr38901_2"):
         phi -= dr.pi
 
         gain = gain_0 * dr.exp(-0.5 * (((theta - dr.pi/2.0) / sigma_theta)**2 + (phi / sigma_phi)**2))
-        return mi.Complex2f(gain, 0)
+        gain_e = dr.sqrt(gain)
+        return mi.Complex2f(gain_e, 0)
 
     return PolarizedAntennaPattern(
         v_pattern=v_gaussian_pattern,
